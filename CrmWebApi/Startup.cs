@@ -14,20 +14,15 @@ namespace CrmWebApi
 	{
 		public void Configuration( IAppBuilder app )
 		{
-			string root = AppDomain.CurrentDomain.BaseDirectory;
 
-			var physicalFileSystem = new PhysicalFileSystem(Path.Combine(root, "wwwroot"));
-
-			var options = new FileServerOptions
+			app.UseFileServer( new FileServerOptions
 			{
-				RequestPath = PathString.Empty,
-				EnableDefaultFiles = true,
-				FileSystem = physicalFileSystem
-			};
-			options.StaticFileOptions.FileSystem = physicalFileSystem;
-			options.StaticFileOptions.ServeUnknownFileTypes = false;
+				RequestPath = PathString.Empty ,
+				EnableDefaultFiles = true ,
+				FileSystem = new PhysicalFileSystem( $"{ AppDomain.CurrentDomain.BaseDirectory}wwwroot" )
+			} );
 
-			app.UseFileServer( options );
+			app.UseStaticFiles();
 		}
 	}
 }
